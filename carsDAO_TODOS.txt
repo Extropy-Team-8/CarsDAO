@@ -1,0 +1,34 @@
+TODOS
+
+
+---------
+Contracts
+---------
+
+- NFT Creation
+  - Randomization (seeder)
+  - PNG -> base64 -> SVG (use base64 string)
+- Token contract
+- (DAO contract)
+- (Voting contract)
+
+
+
+---------
+Site
+---------
+
+- Nav bar
+- NFT section
+  - Display SVG (from base64)
+  - 
+- Wallet connection
+- Display (highest) bids
+- (Bid history ???)
+- Example car NFTs 
+- Bid creation form
+- 
+
+
+
+
