@@ -2,7 +2,7 @@
 
 pragma solidity ^0.8.0;
 
-import { ICarsDescriptor } from './ICarsDescriptor.sol';
+import { ICarsDescriptor } from "./ICarsDescriptor.sol";
 
 interface ICarsSeeder {
   /**

@@ -6,12 +6,13 @@ Contracts
 ---------
 
 - NFT Creation
-  - Randomization (seeder)
+  -/// Randomization (seeder) 
   - PNG -> base64 -> SVG (use base64 string)
-- Token contract
+-/// Token contract
+  - NEED: _contractURIHash 
 - (DAO contract)
 - (Voting contract)
-
+-/// Interface contracts
 
 
 ---------

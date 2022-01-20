@@ -2,8 +2,8 @@
 
 pragma solidity ^0.8.0;
 
-import { ICarsSeeder } from './interfaces/ICarsSeeder.sol';
-import { ICarsDescriptor } from './interfaces/ICarsDescriptor.sol';
+import { ICarsSeeder } from "./interfaces/ICarsSeeder.sol";
+import { ICarsDescriptor } from "./interfaces/ICarsDescriptor.sol";
 
 contract CarsSeeder is ICarsSeeder {
 
@@ -25,15 +25,15 @@ contract CarsSeeder is ICarsSeeder {
     9. TOP / MISC
     */
 
-    uint256 backgroundCount = descriptor.backgroundCount();
-    uint256 floorCount = descriptor.floorCount();
-    uint256 bodyCount = descriptor.bodyCount();
-    uint256 bottomCount = descriptor.bottomCount();
-    uint256 wheelCount = descriptor.wheelsCount();
-    uint256 headlightCount = descriptor.headlightCount();
-    uint256 windowCount = descriptor.windowCount();
-    uint256 weatherCount = descriptor.weatherCount();
-    uint256 miscCount = descriptor.miscCount();
+    uint256 backgroundCount = _descriptor.backgroundCount();
+    uint256 floorCount = _descriptor.floorCount();
+    uint256 bodyCount = _descriptor.bodyCount();
+    uint256 bottomCount = _descriptor.bottomCount();
+    uint256 wheelCount = _descriptor.wheelCount();
+    uint256 headlightCount = _descriptor.headlightCount();
+    uint256 windowCount = _descriptor.windowCount();
+    uint256 weatherCount = _descriptor.weatherCount();
+    uint256 miscCount = _descriptor.miscCount();
 
     return Seed({
       background: uint48(
