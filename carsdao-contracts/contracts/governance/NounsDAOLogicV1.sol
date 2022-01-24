@@ -2,18 +2,14 @@
 
 /// @title The Nouns DAO logic version 1
 
-/*********************************
- * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
- * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
- * ░░░░░░█████████░░█████████░░░ *
- * ░░░░░░██░░░████░░██░░░████░░░ *
- * ░░██████░░░████████░░░████░░░ *
- * ░░██░░██░░░████░░██░░░████░░░ *
- * ░░██░░██░░░████░░██░░░████░░░ *
- * ░░░░░░█████████░░█████████░░░ *
- * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
- * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
- *********************************/
+/*
+       -           __
+     --          ~( @\   \
+    ---   _________]_[__/_>________
+         /  ____ \ <>     |  ____  \
+        =\_/ __ \_\_______|_/ __ \__D
+    ________(__)_____________(__)____
+ */
 
 // LICENSE
 // NounsDAOLogicV1.sol is a modified version of Compound Lab's GovernorBravoDelegate.sol:
@@ -230,9 +226,9 @@ contract NounsDAOLogicV1 is NounsDAOStorageV1, NounsDAOEvents {
         newProposal.forVotes = 0;
         newProposal.againstVotes = 0;
         newProposal.abstainVotes = 0;
-        newProposal.canceled = false;
-        newProposal.executed = false;
-        newProposal.vetoed = false;
+        newProposal.status.canceled = false;
+        newProposal.status.executed = false;
+        newProposal.status.vetoed = false;
 
         latestProposalIds[newProposal.proposer] = newProposal.id;
 
@@ -315,7 +311,7 @@ contract NounsDAOLogicV1 is NounsDAOStorageV1, NounsDAOEvents {
             'NounsDAO::execute: proposal can only be executed if it is queued'
         );
         Proposal storage proposal = proposals[proposalId];
-        proposal.executed = true;
+        proposal.status.executed = true;
         for (uint256 i = 0; i < proposal.targets.length; i++) {
             timelock.executeTransaction(
                 proposal.targets[i],
@@ -342,7 +338,7 @@ contract NounsDAOLogicV1 is NounsDAOStorageV1, NounsDAOEvents {
             'NounsDAO::cancel: proposer above threshold'
         );
 
-        proposal.canceled = true;
+        proposal.status.canceled = true;
         for (uint256 i = 0; i < proposal.targets.length; i++) {
             timelock.cancelTransaction(
                 proposal.targets[i],
@@ -367,7 +363,7 @@ contract NounsDAOLogicV1 is NounsDAOStorageV1, NounsDAOEvents {
 
         Proposal storage proposal = proposals[proposalId];
 
-        proposal.vetoed = true;
+        proposal.status.vetoed = true;
         for (uint256 i = 0; i < proposal.targets.length; i++) {
             timelock.cancelTransaction(
                 proposal.targets[i],
@@ -421,9 +417,9 @@ contract NounsDAOLogicV1 is NounsDAOStorageV1, NounsDAOEvents {
     function state(uint256 proposalId) public view returns (ProposalState) {
         require(proposalCount >= proposalId, 'NounsDAO::state: invalid proposal id');
         Proposal storage proposal = proposals[proposalId];
-        if (proposal.vetoed) {
+        if (proposal.status.vetoed) {
             return ProposalState.Vetoed;
-        } else if (proposal.canceled) {
+        } else if (proposal.status.canceled) {
             return ProposalState.Canceled;
         } else if (block.number <= proposal.startBlock) {
             return ProposalState.Pending;
@@ -433,7 +429,7 @@ contract NounsDAOLogicV1 is NounsDAOStorageV1, NounsDAOEvents {
             return ProposalState.Defeated;
         } else if (proposal.eta == 0) {
             return ProposalState.Succeeded;
-        } else if (proposal.executed) {
+        } else if (proposal.status.executed) {
             return ProposalState.Executed;
         } else if (block.timestamp >= proposal.eta + timelock.GRACE_PERIOD()) {
             return ProposalState.Expired;

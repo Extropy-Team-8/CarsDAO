@@ -60,7 +60,13 @@ contract NounsDAOEvents {
     /// @param support Support value for the vote. 0=against, 1=for, 2=abstain
     /// @param votes Number of votes which were cast by the voter
     /// @param reason The reason given for the vote by the voter
-    event VoteCast(address indexed voter, uint256 proposalId, uint8 support, uint256 votes, string reason);
+    event VoteCast(
+        address indexed voter,
+        uint256 proposalId,
+        uint8 support,
+        uint256 votes,
+        string reason
+    );
 
     /// @notice An event emitted when a proposal has been canceled
     event ProposalCanceled(uint256 id);
@@ -81,13 +87,22 @@ contract NounsDAOEvents {
     event VotingPeriodSet(uint256 oldVotingPeriod, uint256 newVotingPeriod);
 
     /// @notice Emitted when implementation is changed
-    event NewImplementation(address oldImplementation, address newImplementation);
+    event NewImplementation(
+        address oldImplementation,
+        address newImplementation
+    );
 
     /// @notice Emitted when proposal threshold basis points is set
-    event ProposalThresholdBPSSet(uint256 oldProposalThresholdBPS, uint256 newProposalThresholdBPS);
+    event ProposalThresholdBPSSet(
+        uint256 oldProposalThresholdBPS,
+        uint256 newProposalThresholdBPS
+    );
 
     /// @notice Emitted when quorum votes basis points is set
-    event QuorumVotesBPSSet(uint256 oldQuorumVotesBPS, uint256 newQuorumVotesBPS);
+    event QuorumVotesBPSSet(
+        uint256 oldQuorumVotesBPS,
+        uint256 newQuorumVotesBPS
+    );
 
     /// @notice Emitted when pendingAdmin is changed
     event NewPendingAdmin(address oldPendingAdmin, address newPendingAdmin);
@@ -147,6 +162,14 @@ contract NounsDAOStorageV1 is NounsDAOProxyStorage {
     /// @notice The latest proposal for each proposer
     mapping(address => uint256) public latestProposalIds;
 
+    struct Status {
+        bool canceled;
+        /// @notice Flag marking whether the proposal has been vetoed
+        bool vetoed;
+        /// @notice Flag marking whether the proposal has been executed
+        bool executed;
+    }
+
     struct Proposal {
         /// @notice Unique id for looking up a proposal
         uint256 id;
@@ -177,11 +200,7 @@ contract NounsDAOStorageV1 is NounsDAOProxyStorage {
         /// @notice Current number of votes for abstaining for this proposal
         uint256 abstainVotes;
         /// @notice Flag marking whether the proposal has been canceled
-        bool canceled;
-        /// @notice Flag marking whether the proposal has been vetoed
-        bool vetoed;
-        /// @notice Flag marking whether the proposal has been executed
-        bool executed;
+        Status status;
         /// @notice Receipts of ballots for the entire set of voters
         mapping(address => Receipt) receipts;
     }
@@ -245,7 +264,10 @@ interface INounsDAOExecutor {
 }
 
 interface NounsTokenLike {
-    function getPriorVotes(address account, uint256 blockNumber) external view returns (uint96);
+    function getPriorVotes(address account, uint256 blockNumber)
+        external
+        view
+        returns (uint96);
 
     function totalSupply() external view returns (uint96);
 }
