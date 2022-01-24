@@ -14,7 +14,6 @@
   "license": "ISC",
   "dependencies": {
     "@openzeppelin/contracts": "^4.4.2",
-    "@openzeppelin/contracts-upgradeable": "^4.4.2",
     "base64-sol": "^1.1.0"
   },
   "devDependencies": {
