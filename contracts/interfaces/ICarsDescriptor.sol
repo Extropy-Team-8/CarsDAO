@@ -27,6 +27,7 @@ interface ICarsDescriptor {
   // 7. WINDOWS
   // 8. WEATHER
   // 9. TOP / MISC
+  //Hi there, I'm a comment.
 
   // return asset with given index
   function backgrounds(uint256 _index) external view returns (string memory);
