@@ -22,7 +22,7 @@
 //
 // MODIFICATIONS
 // NounsDAOEvents, NounsDAOProxyStorage, NounsDAOStorage adds support for changes made by Nouns DAO to GovernorBravo.sol
-// See NounsDAOLogicV1.sol for more details.
+// See NounsDAOLogic.sol for more details.
 
 pragma solidity ^0.8.6;
 
