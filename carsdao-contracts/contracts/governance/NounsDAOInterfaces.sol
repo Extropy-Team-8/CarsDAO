@@ -21,7 +21,7 @@
 // Additional conditions of BSD-3-Clause can be found here: https://opensource.org/licenses/BSD-3-Clause
 //
 // MODIFICATIONS
-// NounsDAOEvents, NounsDAOProxyStorage, NounsDAOStorageV1 adds support for changes made by Nouns DAO to GovernorBravo.sol
+// NounsDAOEvents, NounsDAOProxyStorage, NounsDAOStorage adds support for changes made by Nouns DAO to GovernorBravo.sol
 // See NounsDAOLogicV1.sol for more details.
 
 pragma solidity ^0.8.6;
@@ -114,24 +114,13 @@ contract NounsDAOEvents {
     event NewVetoer(address oldVetoer, address newVetoer);
 }
 
-contract NounsDAOProxyStorage {
-    /// @notice Administrator for this contract
-    address public admin;
-
-    /// @notice Pending administrator for this contract
-    address public pendingAdmin;
-
-    /// @notice Active brains of Governor
-    address public implementation;
-}
-
 /**
  * @title Storage for Governor Bravo Delegate
- * @notice For future upgrades, do not change NounsDAOStorageV1. Create a new
- * contract which implements NounsDAOStorageV1 and following the naming convention
+ * @notice For future upgrades, do not change NounsDAOStorage. Create a new
+ * contract which implements NounsDAOStorage and following the naming convention
  * NounsDAOStorageVX.
  */
-contract NounsDAOStorageV1 is NounsDAOProxyStorage {
+contract NounsDAOStorage {
     /// @notice Vetoer who has the ability to veto any proposal
     address public vetoer;
 

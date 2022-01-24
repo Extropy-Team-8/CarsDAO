@@ -2,9 +2,9 @@
 
 pragma solidity ^0.8.6;
 
-import '../governance/NounsDAOLogicV1.sol';
+import '../governance/NounsDAOLogic.sol';
 
-contract NounsDAOLogicV1Harness is NounsDAOLogicV1 {
+contract NounsDAOLogicHarness is NounsDAOLogic {
     function initialize(
         address timelock_,
         address nouns_,

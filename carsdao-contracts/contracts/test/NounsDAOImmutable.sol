@@ -2,9 +2,9 @@
 
 pragma solidity ^0.8.6;
 
-import '../governance/NounsDAOLogicV1.sol';
+import '../governance/NounsDAOLogic.sol';
 
-contract NounsDAOImmutable is NounsDAOLogicV1 {
+contract NounsDAOImmutable is NounsDAOLogic {
     constructor(
         address timelock_,
         address nouns_,
