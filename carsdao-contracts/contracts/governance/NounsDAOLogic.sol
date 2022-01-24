@@ -56,9 +56,10 @@
 
 pragma solidity ^0.8.6;
 
+import "@openzeppelin/contracts/access/Ownable.sol";
 import './NounsDAOInterfaces.sol';
 
-contract NounsDAOLogic is NounsDAOStorage, NounsDAOEvents {
+contract NounsDAOLogic is NounsDAOStorage, NounsDAOEvents, Ownable {
     /// @notice The name of this contract
     string public constant name = 'Nouns DAO';
 
@@ -114,9 +115,9 @@ contract NounsDAOLogic is NounsDAOStorage, NounsDAOEvents {
         uint256 votingDelay_,
         uint256 proposalThresholdBPS_,
         uint256 quorumVotesBPS_
-    ) public virtual {
+    ) public virtual onlyOwner {
         require(address(timelock) == address(0), 'NounsDAO::initialize: can only initialize once');
-        require(msg.sender == admin, 'NounsDAO::initialize: admin only');
+        // require(msg.sender == admin, 'NounsDAO::initialize: admin only');
         require(timelock_ != address(0), 'NounsDAO::initialize: invalid timelock address');
         require(nouns_ != address(0), 'NounsDAO::initialize: invalid nouns address');
         require(
@@ -522,8 +523,8 @@ contract NounsDAOLogic is NounsDAOStorage, NounsDAOEvents {
      * @notice Admin function for setting the voting delay
      * @param newVotingDelay new voting delay, in blocks
      */
-    function _setVotingDelay(uint256 newVotingDelay) external {
-        require(msg.sender == admin, 'NounsDAO::_setVotingDelay: admin only');
+    function _setVotingDelay(uint256 newVotingDelay) external onlyOwner {
+        // require(msg.sender == admin, 'NounsDAO::_setVotingDelay: admin only');
         require(
             newVotingDelay >= MIN_VOTING_DELAY && newVotingDelay <= MAX_VOTING_DELAY,
             'NounsDAO::_setVotingDelay: invalid voting delay'
@@ -538,8 +539,8 @@ contract NounsDAOLogic is NounsDAOStorage, NounsDAOEvents {
      * @notice Admin function for setting the voting period
      * @param newVotingPeriod new voting period, in blocks
      */
-    function _setVotingPeriod(uint256 newVotingPeriod) external {
-        require(msg.sender == admin, 'NounsDAO::_setVotingPeriod: admin only');
+    function _setVotingPeriod(uint256 newVotingPeriod) external onlyOwner {
+        // require(msg.sender == admin, 'NounsDAO::_setVotingPeriod: admin only');
         require(
             newVotingPeriod >= MIN_VOTING_PERIOD && newVotingPeriod <= MAX_VOTING_PERIOD,
             'NounsDAO::_setVotingPeriod: invalid voting period'
@@ -555,8 +556,8 @@ contract NounsDAOLogic is NounsDAOStorage, NounsDAOEvents {
      * @dev newProposalThresholdBPS must be greater than the hardcoded min
      * @param newProposalThresholdBPS new proposal threshold
      */
-    function _setProposalThresholdBPS(uint256 newProposalThresholdBPS) external {
-        require(msg.sender == admin, 'NounsDAO::_setProposalThresholdBPS: admin only');
+    function _setProposalThresholdBPS(uint256 newProposalThresholdBPS) external onlyOwner {
+        // require(msg.sender == admin, 'NounsDAO::_setProposalThresholdBPS: admin only');
         require(
             newProposalThresholdBPS >= MIN_PROPOSAL_THRESHOLD_BPS &&
                 newProposalThresholdBPS <= MAX_PROPOSAL_THRESHOLD_BPS,
@@ -573,8 +574,8 @@ contract NounsDAOLogic is NounsDAOStorage, NounsDAOEvents {
      * @dev newQuorumVotesBPS must be greater than the hardcoded min
      * @param newQuorumVotesBPS new proposal threshold
      */
-    function _setQuorumVotesBPS(uint256 newQuorumVotesBPS) external {
-        require(msg.sender == admin, 'NounsDAO::_setQuorumVotesBPS: admin only');
+    function _setQuorumVotesBPS(uint256 newQuorumVotesBPS) external onlyOwner {
+        // require(msg.sender == admin, 'NounsDAO::_setQuorumVotesBPS: admin only');
         require(
             newQuorumVotesBPS >= MIN_QUORUM_VOTES_BPS && newQuorumVotesBPS <= MAX_QUORUM_VOTES_BPS,
             'NounsDAO::_setProposalThreshold: invalid proposal threshold'
@@ -585,46 +586,46 @@ contract NounsDAOLogic is NounsDAOStorage, NounsDAOEvents {
         emit QuorumVotesBPSSet(oldQuorumVotesBPS, quorumVotesBPS);
     }
 
-    /**
-     * @notice Begins transfer of admin rights. The newPendingAdmin must call `_acceptAdmin` to finalize the transfer.
-     * @dev Admin function to begin change of admin. The newPendingAdmin must call `_acceptAdmin` to finalize the transfer.
-     * @param newPendingAdmin New pending admin.
-     */
-    function _setPendingAdmin(address newPendingAdmin) external {
-        // Check caller = admin
-        require(msg.sender == admin, 'NounsDAO::_setPendingAdmin: admin only');
+    // /**
+    //  * @notice Begins transfer of admin rights. The newPendingAdmin must call `_acceptAdmin` to finalize the transfer.
+    //  * @dev Admin function to begin change of admin. The newPendingAdmin must call `_acceptAdmin` to finalize the transfer.
+    //  * @param newPendingAdmin New pending admin.
+    //  */
+    // function _setPendingAdmin(address newPendingAdmin) external onlyOwner {
+    //     // Check caller = admin
+    //     // require(msg.sender == admin, 'NounsDAO::_setPendingAdmin: admin only');
 
-        // Save current value, if any, for inclusion in log
-        address oldPendingAdmin = pendingAdmin;
+    //     // Save current value, if any, for inclusion in log
+    //     address oldPendingAdmin = pendingAdmin;
 
-        // Store pendingAdmin with value newPendingAdmin
-        pendingAdmin = newPendingAdmin;
+    //     // Store pendingAdmin with value newPendingAdmin
+    //     pendingAdmin = newPendingAdmin;
 
-        // Emit NewPendingAdmin(oldPendingAdmin, newPendingAdmin)
-        emit NewPendingAdmin(oldPendingAdmin, newPendingAdmin);
-    }
+    //     // Emit NewPendingAdmin(oldPendingAdmin, newPendingAdmin)
+    //     emit NewPendingAdmin(oldPendingAdmin, newPendingAdmin);
+    // }
 
-    /**
-     * @notice Accepts transfer of admin rights. msg.sender must be pendingAdmin
-     * @dev Admin function for pending admin to accept role and update admin
-     */
-    function _acceptAdmin() external {
-        // Check caller is pendingAdmin and pendingAdmin ≠ address(0)
-        require(msg.sender == pendingAdmin && msg.sender != address(0), 'NounsDAO::_acceptAdmin: pending admin only');
+    // /**
+    //  * @notice Accepts transfer of admin rights. msg.sender must be pendingAdmin
+    //  * @dev Admin function for pending admin to accept role and update admin
+    //  */
+    // function _acceptAdmin() external {
+    //     // Check caller is pendingAdmin and pendingAdmin ≠ address(0)
+    //     require(msg.sender == pendingAdmin && msg.sender != address(0), 'NounsDAO::_acceptAdmin: pending admin only');
 
-        // Save current values for inclusion in log
-        address oldAdmin = admin;
-        address oldPendingAdmin = pendingAdmin;
+    //     // Save current values for inclusion in log
+    //     address oldAdmin = admin;
+    //     address oldPendingAdmin = pendingAdmin;
 
-        // Store admin with value pendingAdmin
-        admin = pendingAdmin;
+    //     // Store admin with value pendingAdmin
+    //     admin = pendingAdmin;
 
-        // Clear the pending value
-        pendingAdmin = address(0);
+    //     // Clear the pending value
+    //     pendingAdmin = address(0);
 
-        emit NewAdmin(oldAdmin, admin);
-        emit NewPendingAdmin(oldPendingAdmin, pendingAdmin);
-    }
+    //     emit NewAdmin(oldAdmin, admin);
+    //     emit NewPendingAdmin(oldPendingAdmin, pendingAdmin);
+    // }
 
     /**
      * @notice Changes vetoer address

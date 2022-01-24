@@ -13,8 +13,8 @@ contract NounsDAOLogicHarness is NounsDAOLogic {
         uint256 votingDelay_,
         uint256 proposalThresholdBPS_,
         uint256 quorumVotesBPS_
-    ) public override {
-        require(msg.sender == admin, 'NounsDAO::initialize: admin only');
+    ) public override onlyOwner {
+        // require(msg.sender == admin, 'NounsDAO::initialize: admin only');
         require(address(timelock) == address(0), 'NounsDAO::initialize: can only initialize once');
 
         timelock = INounsDAOExecutor(timelock_);

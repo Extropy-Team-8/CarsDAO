@@ -8,17 +8,17 @@ contract NounsDAOImmutable is NounsDAOLogic {
     constructor(
         address timelock_,
         address nouns_,
-        address admin_,
+        // address admin_,
         address vetoer_,
         uint256 votingPeriod_,
         uint256 votingDelay_,
         uint256 proposalThresholdBPS_,
         uint256 quorumVotesBPS_
     ) {
-        admin = msg.sender;
+        // admin = msg.sender;
         initialize(timelock_, nouns_, vetoer_, votingPeriod_, votingDelay_, proposalThresholdBPS_, quorumVotesBPS_);
 
-        admin = admin_;
+        // admin = admin_;
     }
 
     function initialize(
@@ -29,8 +29,8 @@ contract NounsDAOImmutable is NounsDAOLogic {
         uint256 votingDelay_,
         uint256 proposalThresholdBPS_,
         uint256 quorumVotesBPS_
-    ) public override {
-        require(msg.sender == admin, 'NounsDAO::initialize: admin only');
+    ) public override onlyOwner {
+        // require(msg.sender == admin, 'NounsDAO::initialize: admin only');
         require(address(timelock) == address(0), 'NounsDAO::initialize: can only initialize once');
 
         timelock = INounsDAOExecutor(timelock_);
