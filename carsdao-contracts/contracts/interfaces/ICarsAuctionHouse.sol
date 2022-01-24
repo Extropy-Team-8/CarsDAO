@@ -6,7 +6,7 @@ interface ICarsAuctionHouse {
     struct Auction {
         uint carID;
         uint highestBidAmount;
-        address highestBidder
+        address highestBidder;
     }
 
     function placeBid(uint256 _bidAmount) external;
