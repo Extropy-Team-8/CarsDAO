@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 /* This example requires Tailwind CSS v2.0+ */
 export default function NotFound() {
     return (
@@ -11,19 +13,13 @@ export default function NotFound() {
                   <h1 className="text-4xl font-extrabold text-gray-900 tracking-tight sm:text-5xl">We're hard at work</h1>
                   <p className="mt-1 text-base text-gray-500">This page is under construction. Check back here soon.</p>
                 </div>
-                <div className="mt-10 flex space-x-3 sm:border-l sm:border-transparent sm:pl-6">
-                  <a
-                    href="#"
+                <div className="mt-10 flex sm:border-l sm:border-transparent sm:pl-16">
+                  <Link
+                    to="/"
                     className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
                   >
                     Go back home
-                  </a>
-                  <a
-                    href="#"
-                    className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-red-700 bg-red-100 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
-                  >
-                    Contact support
-                  </a>
+                  </Link>
                 </div>
               </div>
             </main>
