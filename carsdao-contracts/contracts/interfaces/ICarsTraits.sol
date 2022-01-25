@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0
 
-/// @title Interface for NounsDescriptor
+/// @title Interface for CarsDescriptor
 
 pragma solidity ^0.8.6;
 
