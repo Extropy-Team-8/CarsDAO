@@ -111,7 +111,7 @@ const footerNavigation = {
   ],
 };
 
-export default function Example() {
+export default function Landing() {
   return (
     <div className="bg-white">
       <div className="relative overflow-hidden">
@@ -318,7 +318,7 @@ export default function Example() {
                     <div className="text-red-200 text-2xl mt-3 font-extralight">
                       Current Bid
                     </div>
-                    <div className="text-red-200 text-6xl mt-2 font-extrabold">
+                    <div className="text-white text-6xl mt-2 font-extrabold">
                       99Ξ
                     </div>
                     <button className="rounded-full h-7 mt-3 px-3 text-sm bg-red-400">
