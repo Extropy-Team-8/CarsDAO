@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0
 
-/// @title The Nouns DAO auction house
+/// @title The Cars DAO auction house
 
 /*
        -           __
@@ -12,11 +12,11 @@
  */
 
 // LICENSE
-// NounsAuctionHouse.sol is a modified version of Zora's AuctionHouse.sol:
+// CarsAuctionHouse.sol is a modified version of Zora's AuctionHouse.sol:
 // https://github.com/ourzora/auction-house/blob/54a12ec1a6cf562e49f0a4917990474b11350a2d/contracts/AuctionHouse.sol
 //
 // AuctionHouse.sol source code Copyright Zora licensed under the GPL-3.0 license.
-// With modifications by Nounders DAO.
+// With modifications by Cars DAO.
 
 pragma solidity ^0.8.6;
 
@@ -24,31 +24,22 @@ import { Pausable } from '@openzeppelin/contracts/security/Pausable.sol';
 import { ReentrancyGuard } from '@openzeppelin/contracts/security/ReentrancyGuard.sol';
 import { Ownable } from '@openzeppelin/contracts/access/Ownable.sol';
 import { IERC20 } from '@openzeppelin/contracts/token/ERC20/IERC20.sol';
-import { INounsAuctionHouse } from './interfaces/INounsAuctionHouse.sol';
-import { INounsToken } from './interfaces/INounsToken.sol';
+import { ICarsAuctionHouse } from './interfaces/ICarsAuctionHouse.sol';
+import { ICarsToken } from './interfaces/ICarsToken.sol';
 import { IWETH } from './interfaces/IWETH.sol';
 
-contract NounsAuctionHouse is INounsAuctionHouse, Pausable, ReentrancyGuard, Ownable {
-    // The Nouns ERC721 token contract
-    INounsToken public nouns;
+contract CarsAuctionHouse is ICarsAuctionHouse, Pausable, ReentrancyGuard, Ownable {
+    // The Cars ERC721 token contract
+    ICarsToken public cars;
 
     // The address of the WETH contract
     address public weth;
-
-    // The minimum amount of time left in an auction after a new bid is created
-    uint256 public timeBuffer;
-
-    // The minimum price accepted in an auction
-    uint256 public reservePrice;
-
-    // The minimum percentage difference between the last bid amount and the current bid
-    uint8 public minBidIncrementPercentage;
 
     // The duration of a single auction
     uint256 public duration;
 
     // The active auction
-    INounsAuctionHouse.Auction public auction;
+    ICarsAuctionHouse.Auction public auction;
 
     /**
      * @notice Initialize the auction house and base contracts,
@@ -56,16 +47,14 @@ contract NounsAuctionHouse is INounsAuctionHouse, Pausable, ReentrancyGuard, Own
      * @dev This function can only be called once.
      */
     constructor(
-        INounsToken _nouns,
+        ICarsToken _cars,
         address _weth,
-        uint256 _timeBuffer,
-        uint256 _reservePrice,
         uint8 _minBidIncrementPercentage,
         uint256 _duration
     ) {
         _pause();
 
-        nouns = _nouns;
+        cars = _cars;
         weth = _weth;
         timeBuffer = _timeBuffer;
         reservePrice = _reservePrice;
@@ -74,7 +63,7 @@ contract NounsAuctionHouse is INounsAuctionHouse, Pausable, ReentrancyGuard, Own
     }
 
     /**
-     * @notice Settle the current auction, mint a new Noun, and put it up for auction.
+     * @notice Settle the current auction, mint a new Car, and put it up for auction.
      */
     function settleCurrentAndCreateNewAuction() external override nonReentrant whenNotPaused {
         _settleAuction();
@@ -90,13 +79,13 @@ contract NounsAuctionHouse is INounsAuctionHouse, Pausable, ReentrancyGuard, Own
     }
 
     /**
-     * @notice Create a bid for a Noun, with a given amount.
+     * @notice Create a bid for a Car, with a given amount.
      * @dev This contract only accepts payment in ETH.
      */
-    function createBid(uint256 nounId) external payable override nonReentrant {
-        INounsAuctionHouse.Auction memory _auction = auction;
+    function createBid(uint256 carId) external payable override nonReentrant {
+        ICarsAuctionHouse.Auction memory _auction = auction;
 
-        require(_auction.nounId == nounId, 'Noun not up for auction');
+        require(_auction.carId == carId, 'Car not up for auction');
         require(block.timestamp < _auction.endTime, 'Auction expired');
         require(msg.value >= reservePrice, 'Must send at least reservePrice');
         require(
@@ -120,55 +109,13 @@ contract NounsAuctionHouse is INounsAuctionHouse, Pausable, ReentrancyGuard, Own
             auction.endTime = _auction.endTime = block.timestamp + timeBuffer;
         }
 
-        emit AuctionBid(_auction.nounId, msg.sender, msg.value, extended);
+        emit AuctionBid(_auction.carId, msg.sender, msg.value, extended);
 
         if (extended) {
-            emit AuctionExtended(_auction.nounId, _auction.endTime);
+            emit AuctionExtended(_auction.carId, _auction.endTime);
         }
     }
 
-    /**
-     * @notice Pause the Nouns auction house.
-     * @dev This function can only be called by the owner when the
-     * contract is unpaused. While no new auctions can be started when paused,
-     * anyone can settle an ongoing auction.
-     */
-    function pause() external override onlyOwner {
-        _pause();
-    }
-
-    /**
-     * @notice Unpause the Nouns auction house.
-     * @dev This function can only be called by the owner when the
-     * contract is paused. If required, this function will start a new auction.
-     */
-    function unpause() external override onlyOwner {
-        _unpause();
-
-        if (auction.startTime == 0 || auction.settled) {
-            _createAuction();
-        }
-    }
-
-    /**
-     * @notice Set the auction time buffer.
-     * @dev Only callable by the owner.
-     */
-    function setTimeBuffer(uint256 _timeBuffer) external override onlyOwner {
-        timeBuffer = _timeBuffer;
-
-        emit AuctionTimeBufferUpdated(_timeBuffer);
-    }
-
-    /**
-     * @notice Set the auction reserve price.
-     * @dev Only callable by the owner.
-     */
-    function setReservePrice(uint256 _reservePrice) external override onlyOwner {
-        reservePrice = _reservePrice;
-
-        emit AuctionReservePriceUpdated(_reservePrice);
-    }
 
     /**
      * @notice Set the auction minimum bid increment percentage.
@@ -187,12 +134,12 @@ contract NounsAuctionHouse is INounsAuctionHouse, Pausable, ReentrancyGuard, Own
      * catch the revert and pause this contract.
      */
     function _createAuction() internal {
-        try nouns.mint() returns (uint256 nounId) {
+        try cars.mint() returns (uint256 carId) {
             uint256 startTime = block.timestamp;
             uint256 endTime = startTime + duration;
 
             auction = Auction({
-                nounId: nounId,
+                carId: carId,
                 amount: 0,
                 startTime: startTime,
                 endTime: endTime,
@@ -200,7 +147,7 @@ contract NounsAuctionHouse is INounsAuctionHouse, Pausable, ReentrancyGuard, Own
                 settled: false
             });
 
-            emit AuctionCreated(nounId, startTime, endTime);
+            emit AuctionCreated(carId, startTime, endTime);
         } catch Error(string memory) {
             _pause();
         }
@@ -208,10 +155,10 @@ contract NounsAuctionHouse is INounsAuctionHouse, Pausable, ReentrancyGuard, Own
 
     /**
      * @notice Settle an auction, finalizing the bid and paying out to the owner.
-     * @dev If there are no bids, the Noun is burned.
+     * @dev If there are no bids, the Car is burned.
      */
     function _settleAuction() internal {
-        INounsAuctionHouse.Auction memory _auction = auction;
+        ICarsAuctionHouse.Auction memory _auction = auction;
 
         require(_auction.startTime != 0, "Auction hasn't begun");
         require(!_auction.settled, 'Auction has already been settled');
@@ -220,16 +167,16 @@ contract NounsAuctionHouse is INounsAuctionHouse, Pausable, ReentrancyGuard, Own
         auction.settled = true;
 
         if (_auction.bidder == address(0)) {
-            nouns.burn(_auction.nounId);
+            cars.burn(_auction.carId);
         } else {
-            nouns.transferFrom(address(this), _auction.bidder, _auction.nounId);
+            cars.transferFrom(address(this), _auction.bidder, _auction.carId);
         }
 
         if (_auction.amount > 0) {
             _safeTransferETHWithFallback(owner(), _auction.amount);
         }
 
-        emit AuctionSettled(_auction.nounId, _auction.bidder, _auction.amount);
+        emit AuctionSettled(_auction.carId, _auction.bidder, _auction.amount);
     }
 
     /**
