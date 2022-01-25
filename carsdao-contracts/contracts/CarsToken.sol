@@ -44,7 +44,7 @@ contract CarsToken is ICarsToken, ERC721, Ownable {
     _;
   }
 
-  constructor(address _traits, uint256 _maxTokens) ERC721("CarDAO", 'CARD') { 
+  constructor(address _traits, uint256 _maxTokens) ERC721("CarsDAO", 'CARS') { 
     traits = ICarsTraits(_traits);
     // auctionHouse = ICarsAuctionHouse(_auctionHouse);
     MAX_TOKENS = _maxTokens;
