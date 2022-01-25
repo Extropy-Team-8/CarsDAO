@@ -11,41 +11,6 @@ const styles = {
     height: '50vh',
     backgroundColor: colors.primary,
   },
-  header: {
-    display: 'flex',
-    padding: '0 5rem',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  nav: {
-    display: 'flex',
-    width: '40rem',
-    flexDirection: 'row',
-    height: '6rem',
-  },
-  navList: {
-    display: 'flex',
-    width: '100%',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-evenly',
-    listStyleType: 'none',
-    color: colors.lightGrey,
-    fontSize: '1.2rem',
-    fontWeight: 600,
-  },
-  title: {
-    fontSize: '5rem',
-  },
-  walletButton: {
-    backgroundColor: colors.tertiary,
-    padding: '1rem 1.5rem',
-    borderRadius: '12rem',
-    border: 'none',
-    fontSize: '1.2rem',
-    fontWeight: 600,
-    marginLeft: '3rem',
-  },
   grid: {
     display: 'grid',
     gridTemplateAreas: `'. middle .'`,
@@ -70,6 +35,12 @@ const styles = {
     alignItems: 'center',
     backgroundColor: colors.tertiary,
   },
+  h2: {
+    fontSize: '2rem',
+    fontWeight: 600,
+    color: colors.lightGrey,
+    padding: '1rem 0',
+  },
   biddingInput: {
     padding: '1rem',
     fontSize: '1.2rem',
@@ -80,9 +51,13 @@ const styles = {
     padding: '1rem 2rem',
     marginLeft: '2rem',
     fontSize: '1.2rem',
+    fontWeight: 600,
+    color: colors.orange,
+    backgroundColor: colors.darkGrey,
   },
   highestBid: {
     fontSize: '2rem',
+    marginTop: '1rem',
     color: colors.secondary,
   },
 }
