@@ -4,15 +4,25 @@ import styles from './style'
 import Header from '../../components/Header'
 
 function App() {
-  const provider = new ethers.providers.Web3Provider(window.ethereum)
   const [signer, setSigner] = useState(null)
+  const [wrongNetwork, setWrongNetwork] = useState(false)
   const [connectedAddress, setConnectedAddress] = useState(null)
   const [bidInput, setBidInput] = useState('')
 
   const connect = async () => {
-    await provider.send('eth_requestAccounts', [])
-    setSigner(provider.getSigner())
+    const provider = new ethers.providers.Web3Provider(window.ethereum)
+    if (window.ethereum) {
+      if (parseInt(window.ethereum.chainId) !== 4) {
+        console.log(window.ethereum.chainId)
+        setWrongNetwork(true)
+        return
+      }
+      await provider.send('eth_requestAccounts', [])
+      setSigner(provider.getSigner())
+    }
   }
+
+  window.ethereum.on('chainChanged', connect)
   // console.log('Account:', await signer.getAddress())
 
   useEffect(() => {
@@ -27,7 +37,12 @@ function App() {
   return (
     <div className='App' style={styles.container}>
       <div className='top-section' style={styles.topSection}>
-        <Header connect={connect} signer={signer} connectedAddress={connectedAddress} />
+        <Header
+          connect={connect}
+          signer={signer}
+          connectedAddress={connectedAddress}
+          wrongNetwork={wrongNetwork}
+        />
         <div style={styles.grid}>
           <div style={styles.NFTdisplaySection}>
             <div style={styles.imageContainer}></div>

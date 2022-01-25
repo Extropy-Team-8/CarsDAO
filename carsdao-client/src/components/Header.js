@@ -31,10 +31,11 @@ const styles = {
   },
 }
 
-const Header = ({ connect, signer, connectedAddress }) => {
+const Header = ({ connect, signer, connectedAddress, wrongNetwork }) => {
   return (
     <header style={styles.header}>
       <h1 style={styles.title}>CarsDAO</h1>
+      {wrongNetwork && <h2>Please connect to the Rinkeby network!</h2>}
       <nav style={styles.nav}>
         <ul style={styles.navList}>
           <li>
