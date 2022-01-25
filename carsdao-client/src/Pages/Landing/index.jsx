@@ -14,6 +14,9 @@ import {
   ArrowCircleLeftIcon,
 } from '@heroicons/react/outline'
 import { ChevronRightIcon, ExternalLinkIcon } from '@heroicons/react/solid'
+import CarsTraits from '../../artefacts/CarsTraits.json'
+import CarsToken from '../../artefacts/CarsToken.json'
+import CarsAuctionHouse from '../../artefacts/CarsAuctionHouse.json'
 
 const navigation = [
   { name: 'Proposals', href: '#' },
@@ -117,7 +120,69 @@ export default function Example() {
   const [wrongNetwork, setWrongNetwork] = useState(false)
   const [connectedAddress, setConnectedAddress] = useState(null)
   const [bidInput, setBidInput] = useState('')
+  const [nft, setNft] = useState(null)
+  const [currentCarId, setCurrentCarId] = useState('')
+  const [currentBid, setCurrentBid] = useState('')
   let provider = new ethers.providers.Web3Provider(window.ethereum)
+
+  const AUCTION_HOUSE_CONTRACT_ADDRESS = '0x61216dcAd9b3267A3BeF1b79d0133D3B1481383c'
+  const TRAIT_CONTRACT_ADDRESS = '0xAa6A9eb5c0E84D5B22649DE223e70F62F8Fde82C'
+  const CAR_CONTRACT_ADDRESS = '0x7Abbc23e48012102E846F17B081e294DEDC6578e'
+
+  const carContract = new ethers.Contract(CAR_CONTRACT_ADDRESS, CarsTraits.abi, provider)
+  const auctionContract = new ethers.Contract(
+    AUCTION_HOUSE_CONTRACT_ADDRESS,
+    CarsAuctionHouse.abi,
+    provider,
+  )
+
+  const placeBid = async (amount) => {
+    try {
+      console.log(amount)
+      const auctionContract = new ethers.Contract(
+        AUCTION_HOUSE_CONTRACT_ADDRESS,
+        CarsAuctionHouse.abi,
+        signer,
+      )
+      const tx = await auctionContract.createBid(ethers.utils.parseEther(amount))
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
+  useEffect(() => {
+    const getAuctionDetails = async () => {
+      try {
+        let auction = await auctionContract.auction()
+        setCurrentCarId(auction.carId)
+        setCurrentBid(parseFloat(auction.amount))
+        console.log('auction:', auction)
+      } catch (e) {
+        console.log('error: ', e)
+      }
+    }
+    getAuctionDetails()
+  }, [])
+
+  useEffect(() => {
+    const getNFTImage = async () => {
+      try {
+        let uri = await carContract.tokenURI(2)
+        let uriToDecode = uri.replace('data:application/json;base64,', '')
+        let decoded = atob(uriToDecode)
+        let jsonParsed = JSON.parse(decoded)
+        console.log(jsonParsed)
+        setNft(jsonParsed)
+        console.log('NFT set, ID: ', nft.name)
+      } catch (e) {
+        console.log('error: ', e)
+      }
+    }
+    if (currentCarId) {
+      getNFTImage()
+    }
+  }, [currentCarId])
+
   const connect = async () => {
     if (window.ethereum) {
       console.log(parseInt(window.ethereum.chainId))
@@ -138,7 +203,6 @@ export default function Example() {
     setWrongNetwork(false)
     setSigner(null)
   })
-  // console.log('Account:', await signer.getAddress())
 
   useEffect(() => {
     const updateConnectedAddress = async () => {
@@ -338,28 +402,38 @@ export default function Example() {
                       src="https://tailwindui.com/img/component-images/cloud-illustration-teal-cyan.svg"
                       alt=""
                     /> */}
-                    <div className='text-red-200 text-2xl mb-3'>Car #234</div>
+                    <div className='text-red-200 text-2xl mb-3'>{nft ? nft.name : ''}</div>
                     <div className='flex items-center space-x-6'>
                       <ArrowCircleLeftIcon className='w-8 h-8 text-red-200' />
-                      <img src='./logo512.png' className='w-48 h-48 object-contain'></img>
+                      <img
+                        alt={nft ? nft.name : ''}
+                        src={nft ? nft.image : ''}
+                        className='w-48 h-48 object-contain'
+                      ></img>
                       <ArrowCircleRightIcon className='w-8 h-8 text-red-200' />
                     </div>
                     <div className='text-red-200 text-2xl mt-3 font-extralight'>Current Bid</div>
-                    <div className='text-red-200 text-6xl mt-2 font-extrabold'>99Ξ</div>
+                    <div className='text-red-200 text-6xl mt-2 font-extrabold'>{currentBid}Ξ</div>
                     <button className='rounded-full h-7 mt-3 px-3 text-sm bg-red-400'>
                       View Bid History
                     </button>
                     <div className='min-w-0 flex-1 mt-10 flex'>
-                      <label htmlFor='email' className='sr-only'>
+                      <label htmlFor='bid' className='sr-only'>
                         Enter your bid
                       </label>
                       <input
-                        id='email'
-                        type='email'
+                        id='bid'
+                        type='number'
+                        onChange={(event) => setBidInput(event.target.value)}
+                        value={bidInput}
                         placeholder='Enter your bid'
                         className='block w-full px-3 py-1 rounded-md border-0 text-base text-black-700 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-offset-2 focus:ring-cyan-400 focus:ring-offset-red-700'
                       />
-                      <button className='px-6 ml-3 bg-gradient-to-r from-teal-500 to-cyan-600 rounded-md flex-none font-bold text-white'>
+                      <button
+                        disabled={!connectedAddress}
+                        className='px-6 ml-3 bg-gradient-to-r from-teal-500 to-cyan-600 rounded-md flex-none font-bold text-white'
+                        onClick={() => placeBid(bidInput)}
+                      >
                         Make Bid
                       </button>
                     </div>
