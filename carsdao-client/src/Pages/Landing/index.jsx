@@ -342,7 +342,7 @@ export default function Example() {
                     <div className='text-red-200 text-2xl mb-3'>Car #234</div>
                     <div className='flex items-center space-x-6'>
                       <ArrowCircleLeftIcon className='w-8 h-8 text-red-200 cursor-pointer' />
-                      <img src='./logo512.png' className='w-48 h-48 object-contain'></img>
+                      <img src='./logo512.png' className='w-48 h-48 object-contain rounded-t-md'></img>
                       <ArrowCircleRightIcon className='w-8 h-8 text-red-200 cursor-pointer' />
                     </div>
                     <div className='text-red-200 text-2xl mt-3 font-extralight'>Current Bid</div>
