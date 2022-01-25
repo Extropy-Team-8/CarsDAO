@@ -1,16 +1,5 @@
 // SPDX-License-Identifier: UNLICENSED
 
-/// @title Interface for Car Auction Houses
-
-/*
-       -           __
-     --          ~( @\   \
-    ---   _________]_[__/_>________
-         /  ____ \ <>     |  ____  \
-        =\_/ __ \_\_______|_/ __ \__D
-    ________(__)_____________(__)____
- */
-
 pragma solidity ^0.8.6;
 
 interface ICarsAuctionHouse {
