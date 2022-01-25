@@ -1,8 +1,5 @@
 // SPDX-License-Identifier: MIT LICENSE
 
-<<<<<<< HEAD
-pragma solidity ^0.8.0;
-=======
 /*
        -           __
      --          ~( @\   \
@@ -14,7 +11,6 @@ pragma solidity ^0.8.0;
 
 
 pragma solidity ^0.8.6;
->>>>>>> 33de2c579b2dcb60729ae9d52c8f648200daf2b2
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 import "./interfaces/ICarsTraits.sol";
@@ -92,11 +88,7 @@ contract CarsTraits is Ownable, ICarsTraits {
    * @return a valid SVG of the Sheep / Wolf
    */
   function drawSVG(uint256 tokenId) public view returns (string memory) {
-<<<<<<< HEAD
-    ICar.Car memory c = carTokenContract.getTokenTraits(tokenId);
-=======
     ICarsToken.Car memory c = carTokenContract.getTokenTraits(tokenId);
->>>>>>> 33de2c579b2dcb60729ae9d52c8f648200daf2b2
 
     string memory svgString = string(abi.encodePacked(
       drawTrait(traitData[0][c.background]),
@@ -139,11 +131,7 @@ contract CarsTraits is Ownable, ICarsTraits {
    * @return a JSON array of all of the attributes for given token ID
    */
   function compileAttributes(uint256 tokenId) public view returns (string memory) {
-<<<<<<< HEAD
-    ICar.Car memory c = carTokenContract.getTokenTraits(tokenId);
-=======
     ICarsToken.Car memory c = carTokenContract.getTokenTraits(tokenId);
->>>>>>> 33de2c579b2dcb60729ae9d52c8f648200daf2b2
     string memory traits;
 
     traits = string(abi.encodePacked(
