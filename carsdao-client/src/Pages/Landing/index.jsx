@@ -17,12 +17,13 @@ import { ChevronRightIcon, ExternalLinkIcon } from '@heroicons/react/solid'
 import CarsTraits from '../../artefacts/CarsTraits.json'
 import CarsToken from '../../artefacts/CarsToken.json'
 import CarsAuctionHouse from '../../artefacts/CarsAuctionHouse.json'
+import { Link } from 'react-router-dom'
 
 const navigation = [
-  { name: 'Proposals', href: '#' },
-  { name: 'Insiders', href: '#' },
-  { name: 'Treasury', href: '#' },
-  { name: 'Forum', href: '#' },
+  { name: 'Proposals', href: '/proposals' },
+  { name: 'Insiders', href: '/insiders' },
+  { name: 'Treasury', href: '/treasury' },
+  { name: 'Forum', href: '/forum' },
 ]
 const features = [
   {
@@ -224,10 +225,10 @@ export default function Example() {
             >
               <div className='flex items-center flex-1'>
                 <div className='flex items-center justify-between w-full md:w-auto'>
-                  <a href='#'>
+                  <Link to='/'>
                     <span className='sr-only'>Workflow</span>
                     <img className='h-8 w-auto sm:h-10' src='./Logo.png' alt='' />
-                  </a>
+                  </Link>
                   <div className='-mr-2 flex items-center md:hidden'>
                     <Popover.Button className='bg-red-700 rounded-md p-2 inline-flex items-center justify-center text-red-400 hover:bg-red-800 focus:outline-none focus:ring-2 focus-ring-inset focus:ring-white'>
                       <span className='sr-only'>Open main menu</span>
@@ -249,7 +250,7 @@ export default function Example() {
               </div>
               {wrongNetwork && (
                 <div>
-                  <p>Please connect to Rinkeby network</p>
+                  <p className='mr-4 text-black'>Please connect to Rinkeby network</p>
                 </div>
               )}
               <div onClick={connect} className='hidden md:flex md:items-center md:space-x-6'>
@@ -259,7 +260,7 @@ export default function Example() {
                 >
                   Log in
                 </a> */}
-                <p className='inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md text-white bg-red-600 hover:text-red-200'>
+                <p className='inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md text-white bg-red-600 hover:text-red-200 hover:cursor-pointer'>
                   {connectedAddress
                     ? connectedAddress.slice(0, 5) + ' ... ' + connectedAddress.slice(-3)
                     : 'Connect Wallet'}
@@ -310,17 +311,17 @@ export default function Example() {
                       href='#'
                       className='block text-center w-full py-3 px-4 rounded-md shadow bg-gradient-to-r from-teal-500 to-cyan-600 text-white font-medium hover:from-teal-600 hover:to-cyan-700'
                     >
-                      Start free trial
+                      Connect Wallet
                     </a>
                   </div>
-                  <div className='mt-6 px-5'>
+                  {/* <div className='mt-6 px-5'>
                     <p className='text-center text-base font-medium text-red-500'>
                       Existing customer?{' '}
-                      <a href='#' className='text-red-700 hover:underline'>
+                      <Link to='#' className='text-red-700 hover:underline'>
                         Login
-                      </a>
+                      </Link>
                     </p>
-                  </div>
+                  </div> */}
                 </div>
               </div>
             </Popover.Panel>
@@ -575,13 +576,19 @@ export default function Example() {
             <div className='xl:grid xl:grid-cols-3 xl:gap-8'>
               <div className='space-y-8 xl:col-span-1'>
                 <img className='h-10' src='./Logo.png' alt='Company name' />
-                <p className='text-gray-800 text-base'>Improving automobiles.</p>
+                <p className='text-gray-800 text-base'>
+                  Shaping automobile industry for 21st century
+                </p>
                 <div className='flex space-x-6'>
                   {footerNavigation.social.map((item) => (
-                    <a key={item.name} href={item.href} className='text-red-400 hover:text-red-500'>
+                    <Link
+                      key={item.name}
+                      to={item.href}
+                      className='text-red-400 hover:text-red-500'
+                    >
                       <span className='sr-only'>{item.name}</span>
                       <item.icon className='h-6 w-6' aria-hidden='true' />
-                    </a>
+                    </Link>
                   ))}
                 </div>
               </div>
