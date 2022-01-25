@@ -341,9 +341,9 @@ export default function Example() {
                     /> */}
                     <div className='text-red-200 text-2xl mb-3'>Car #234</div>
                     <div className='flex items-center space-x-6'>
-                      <ArrowCircleLeftIcon className='w-8 h-8 text-red-200' />
+                      <ArrowCircleLeftIcon className='w-8 h-8 text-red-200 cursor-pointer' />
                       <img src='./logo512.png' className='w-48 h-48 object-contain'></img>
-                      <ArrowCircleRightIcon className='w-8 h-8 text-red-200' />
+                      <ArrowCircleRightIcon className='w-8 h-8 text-red-200 cursor-pointer' />
                     </div>
                     <div className='text-red-200 text-2xl mt-3 font-extralight'>Current Bid</div>
                     <div className='text-white text-6xl mt-2 font-extrabold'>99Ξ</div>
