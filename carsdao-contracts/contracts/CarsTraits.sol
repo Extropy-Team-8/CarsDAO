@@ -1,6 +1,16 @@
 // SPDX-License-Identifier: MIT LICENSE
 
-pragma solidity ^0.8.0;
+/*
+       -           __
+     --          ~( @\   \
+    ---   _________]_[__/_>________
+         /  ____ \ <>     |  ____  \
+        =\_/ __ \_\_______|_/ __ \__D
+    ________(__)_____________(__)____
+ */
+
+
+pragma solidity ^0.8.6;
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 import "./interfaces/ICarsTraits.sol";
@@ -78,7 +88,7 @@ contract CarsTraits is Ownable, ICarsTraits {
    * @return a valid SVG of the Sheep / Wolf
    */
   function drawSVG(uint256 tokenId) public view returns (string memory) {
-    ICar.Car memory c = carTokenContract.getTokenTraits(tokenId);
+    ICarsToken.Car memory c = carTokenContract.getTokenTraits(tokenId);
 
     string memory svgString = string(abi.encodePacked(
       drawTrait(traitData[0][c.background]),
@@ -121,7 +131,7 @@ contract CarsTraits is Ownable, ICarsTraits {
    * @return a JSON array of all of the attributes for given token ID
    */
   function compileAttributes(uint256 tokenId) public view returns (string memory) {
-    ICar.Car memory c = carTokenContract.getTokenTraits(tokenId);
+    ICarsToken.Car memory c = carTokenContract.getTokenTraits(tokenId);
     string memory traits;
 
     traits = string(abi.encodePacked(
