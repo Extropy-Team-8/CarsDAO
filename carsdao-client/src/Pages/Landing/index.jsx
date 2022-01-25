@@ -501,7 +501,7 @@ export default function Example() {
             <div className='xl:grid xl:grid-cols-3 xl:gap-8'>
               <div className='space-y-8 xl:col-span-1'>
                 <img className='h-10' src='./Logo.png' alt='Company name' />
-                <p className='text-gray-800 text-base'>Improving automobiles.</p>
+                <p className='text-gray-800 text-base'>Shaping automobile industry for 21st century</p>
                 <div className='flex space-x-6'>
                   {footerNavigation.social.map((item) => (
                     <a key={item.name} href={item.href} className='text-red-400 hover:text-red-500'>
