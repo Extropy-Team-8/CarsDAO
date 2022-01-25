@@ -2,39 +2,39 @@
 
 pragma solidity ^0.8.6;
 
-import '../governance/NounsDAOLogicV1.sol';
+import '../governance/CarsDAOLogic.sol';
 
-contract NounsDAOImmutable is NounsDAOLogicV1 {
+contract CarsDAOImmutable is CarsDAOLogic {
     constructor(
         address timelock_,
-        address nouns_,
-        address admin_,
+        address cars_,
+        // address admin_,
         address vetoer_,
         uint256 votingPeriod_,
         uint256 votingDelay_,
         uint256 proposalThresholdBPS_,
         uint256 quorumVotesBPS_
     ) {
-        admin = msg.sender;
-        initialize(timelock_, nouns_, vetoer_, votingPeriod_, votingDelay_, proposalThresholdBPS_, quorumVotesBPS_);
+        // admin = msg.sender;
+        initialize(timelock_, cars_, vetoer_, votingPeriod_, votingDelay_, proposalThresholdBPS_, quorumVotesBPS_);
 
-        admin = admin_;
+        // admin = admin_;
     }
 
     function initialize(
         address timelock_,
-        address nouns_,
+        address cars_,
         address vetoer_,
         uint256 votingPeriod_,
         uint256 votingDelay_,
         uint256 proposalThresholdBPS_,
         uint256 quorumVotesBPS_
-    ) public override {
-        require(msg.sender == admin, 'NounsDAO::initialize: admin only');
-        require(address(timelock) == address(0), 'NounsDAO::initialize: can only initialize once');
+    ) public override onlyOwner {
+        // require(msg.sender == admin, 'CarsDAO::initialize: admin only');
+        require(address(timelock) == address(0), 'CarsDAO::initialize: can only initialize once');
 
-        timelock = INounsDAOExecutor(timelock_);
-        nouns = NounsTokenLike(nouns_);
+        timelock = ICarsDAOExecutor(timelock_);
+        cars = CarsTokenLike(cars_);
         vetoer = vetoer_;
         votingPeriod = votingPeriod_;
         votingDelay = votingDelay_;
