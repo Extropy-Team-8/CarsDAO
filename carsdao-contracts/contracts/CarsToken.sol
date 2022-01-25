@@ -11,7 +11,11 @@
     ________(__)_____________(__)____
  */
 
+<<<<<<< HEAD
 pragma solidity ^0.8.0;
+=======
+pragma solidity ^0.8.6;
+>>>>>>> 33de2c579b2dcb60729ae9d52c8f648200daf2b2
 
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
@@ -27,7 +31,11 @@ contract CarsToken is ICarsToken, ERC721, Ownable {
   // number of tokens have been minted so far
   uint16 public minted;
   // quantity of each trait type
+<<<<<<< HEAD
   uint8[][9] public traitCounts;
+=======
+  uint8[][9] public rarities;
+>>>>>>> 33de2c579b2dcb60729ae9d52c8f648200daf2b2
 
   // mapping from tokenId to a struct containing the token's traits
   mapping(uint256 => Car) public tokenTraits;
@@ -39,16 +47,26 @@ contract CarsToken is ICarsToken, ERC721, Ownable {
   ICarsTraits public traits;
 //   ICarsAuctionHouse public auctionHouse;
 
+<<<<<<< HEAD
   modifier onlyAuctionHouse() {
     require(_msgSender() == auctionHouse.address, "Only auction house can call this function");
     _;
   }
 
   constructor(address _traits, address _auctionHouse, uint256 _maxTokens) ERC721("CarDAO", 'CARD') { 
+=======
+  // modifier onlyAuctionHouse() {
+  //   require(_msgSender() == auctionHouse.address, "Only auction house can call this function");
+  //   _;
+  // }
+
+  constructor(address _traits, uint256 _maxTokens) ERC721("CarDAO", 'CARD') { 
+>>>>>>> 33de2c579b2dcb60729ae9d52c8f648200daf2b2
     traits = ICarsTraits(_traits);
     // auctionHouse = ICarsAuctionHouse(_auctionHouse);
     MAX_TOKENS = _maxTokens;
 
+<<<<<<< HEAD
     // bg
     traitCounts[0] = 7;
     // floor
@@ -67,6 +85,26 @@ contract CarsToken is ICarsToken, ERC721, Ownable {
     traitCounts[7] = 7;
     // misc
     traitCounts[8] = 7;
+=======
+   // bg
+    rarities[0] = [1, 1, 1, 1, 1, 1, 1];
+    // ground
+    rarities[1] = [1, 1, 1, 1, 1, 1, 1, 1, 1];
+    // body
+    rarities[2] =  [1, 1, 1, 1, 1, 1];
+    // bottom
+    rarities[3] = [1, 1, 1, 1, 1];
+    // wheel
+    rarities[4] = [1, 1, 1, 1, 1, 1, 1];
+    // headlight
+    rarities[5] = [1, 1, 1, 1, 1, 1, 1, 1];
+    // window
+    rarities[6] = [1, 1, 1, 1, 1, 1];
+    // weather
+    rarities[7] = [1, 1, 1, 1, 1, 1, 1];
+    // misc
+    rarities[8] = [1, 1, 1, 1, 1, 1, 1];
+>>>>>>> 33de2c579b2dcb60729ae9d52c8f648200daf2b2
   }
 
   /** EXTERNAL */
@@ -108,6 +146,7 @@ contract CarsToken is ICarsToken, ERC721, Ownable {
       existingCombinations[structToHash(t)] = tokenId;
       return t;
     }
+<<<<<<< HEAD
     return generate(tokenId, random(seed));
   }
 
@@ -115,6 +154,15 @@ contract CarsToken is ICarsToken, ERC721, Ownable {
     uint8 trait = uint8(seed) % uint8(traitCounts[traitType]);
     if (seed >> 8 < traitCounts[traitType][trait]) return trait;
     return uint8((trait + 2) % traitCounts[traitType]);
+=======
+    return generateTraits(tokenId, random(seed));
+  }
+
+  function selectTrait(uint16 seed, uint8 traitType) internal view returns (uint8) {
+    uint8 trait = uint8(seed) % uint8(rarities[traitType].length);
+    if (seed >> 8 < rarities[traitType][trait]) return trait;
+    return uint8((trait + 2) % rarities[traitType].length);
+>>>>>>> 33de2c579b2dcb60729ae9d52c8f648200daf2b2
   }
 
   /**
