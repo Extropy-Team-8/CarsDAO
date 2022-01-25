@@ -38,6 +38,9 @@ contract CarsAuctionHouse is ICarsAuctionHouse, Pausable, ReentrancyGuard, Ownab
     // The duration of a single auction
     uint256 public duration;
 
+    // The minimum percentage difference between the last bid amount and the current bid
+    uint8 public minBidIncrementPercentage;
+
     // The active auction
     ICarsAuctionHouse.Auction public auction;
 
@@ -56,8 +59,6 @@ contract CarsAuctionHouse is ICarsAuctionHouse, Pausable, ReentrancyGuard, Ownab
 
         cars = _cars;
         weth = _weth;
-        timeBuffer = _timeBuffer;
-        reservePrice = _reservePrice;
         minBidIncrementPercentage = _minBidIncrementPercentage;
         duration = _duration;
     }
@@ -87,7 +88,6 @@ contract CarsAuctionHouse is ICarsAuctionHouse, Pausable, ReentrancyGuard, Ownab
 
         require(_auction.carId == carId, 'Car not up for auction');
         require(block.timestamp < _auction.endTime, 'Auction expired');
-        require(msg.value >= reservePrice, 'Must send at least reservePrice');
         require(
             msg.value >= _auction.amount + ((_auction.amount * minBidIncrementPercentage) / 100),
             'Must send more than last bid by minBidIncrementPercentage amount'
@@ -104,16 +104,8 @@ contract CarsAuctionHouse is ICarsAuctionHouse, Pausable, ReentrancyGuard, Ownab
         auction.bidder = payable(msg.sender);
 
         // Extend the auction if the bid was received within `timeBuffer` of the auction end time
-        bool extended = _auction.endTime - block.timestamp < timeBuffer;
-        if (extended) {
-            auction.endTime = _auction.endTime = block.timestamp + timeBuffer;
-        }
 
-        emit AuctionBid(_auction.carId, msg.sender, msg.value, extended);
-
-        if (extended) {
-            emit AuctionExtended(_auction.carId, _auction.endTime);
-        }
+        emit AuctionBid(_auction.carId, msg.sender, msg.value);
     }
 
 

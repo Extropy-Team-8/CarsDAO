@@ -29,4 +29,7 @@ interface ICarsToken {
   }
 
   function getTokenTraits(uint256 tokenId) external view returns (Car memory);
+    
+  function mint() external payable returns (uint256);
+
 }

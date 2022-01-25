@@ -20,11 +20,14 @@ interface ICarsAuctionHouse {
 
     event AuctionCreated(uint256 indexed carId, uint256 startTime, uint256 endTime);
 
-    event AuctionBid(uint256 indexed carId, address sender, uint256 value, bool extended);
+    event AuctionBid(uint256 indexed carId, address sender, uint256 value);
 
     event AuctionExtended(uint256 indexed carId, uint256 endTime);
 
     event AuctionSettled(uint256 indexed carId, address winner, uint256 amount);
+    
+    event AuctionMinBidIncrementPercentageUpdated(uint256 minBidIncrementPercentage);
+
 
 
     function settleAuction() external;
